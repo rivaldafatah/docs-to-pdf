@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Konversi Word ke PDF</title>
+</head>
+<body>
+  <h1>Konversi Word ke PDF</h1>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="wordFile" accept=".docx">
+    <button type="submit">Upload</button>
+  </form>
+  <form action="/upload" method="get" enctype="multipart/form-data">
+  <div id="result"></div>
+  </form>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fileInput = document.querySelector('input[name="wordFile"]');
+      const formData = new FormData();
+      formData.append('wordFile', fileInput.files[0]);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        const resultDiv = document.querySelector('#result');
+        resultDiv.innerHTML = `<a href="${data.downloadLink}" target="_blank">Unduh PDF</a>`;
+      });
+      fetch('/upload', {
+        method: 'GET',
+        body: formData,
+      });
+    });
+  </script>
+</body>
+</html>
